@@ -28,12 +28,6 @@ public class PlayerController : MonoBehaviour {
 
         rb.AddForce(movement * speed);
     }
-    void OnTriggerEnter (Collider other)
-    {
-        if (other.gameObject.CompareTag("Pool Ball"))
-        {
-        }
-    }
     void SetCountText ()
     {
         countText.text = "Count: " + count.ToString ();
