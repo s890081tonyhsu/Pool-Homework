@@ -40,20 +40,26 @@ public class CameraController : MonoBehaviour {
     public ObservePlayer ob;
     public Limit limit;
     public Text scoreText;
+    public Text ballCountText;
+    public Text playerInHoleText;
     public Text winText;
 
     private Quaternion angles;
     private Rigidbody rbody;
     private AudioSource audioS;
     private float distance;
+    private bool[] ballIn = new bool[10];
+    private int playerInHole;
     private int score;
 
     void Start () {
+        for(int i = 0; i < 10; i++) ballIn[i] = false;
         angles = transform.rotation;
         rbody = player.GetComponent<Rigidbody>();
         audioS = GetComponent<AudioSource>();
         distance = Vector3.Distance(player.transform.position, transform.position);
         score = 0;
+        playerInHole = 0;
         SetCountText ();
         winText.text = "";
     }
@@ -74,13 +80,27 @@ public class CameraController : MonoBehaviour {
              //力量模式impulse:衝力，speed：初速大小
         }
     }
-    public void AddScore (int newScoreValue) {
-        score += newScoreValue;
+    public void AddScore (int ballNum) {
+        if(ballNum > 0){
+            ballIn[ballNum] = true;
+            score += 10;
+        }else{
+            playerInHole += 1;
+            score -= 10;
+        }
         SetCountText ();
     }
     void SetCountText () {
-        scoreText.text = "Count: " + score.ToString ();
-        if (score >= 45) {
+        int ballCount = 0;
+        bool allIn = true;
+        scoreText.text = "Score: " + score.ToString ();
+        playerInHoleText.text = "母球進洞次數：" + playerInHole.ToString ();
+        for(int i = 0; i < 10; i++){
+            ballCount += (ballIn[i] ? 1 : 0);
+            allIn &= ballIn[i];
+        }
+        ballCountText.text = "進球數：" + ballCount.ToString();
+        if (allIn) {
             winText.text = "You win!";
         }
     }

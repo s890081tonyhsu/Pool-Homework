@@ -27,7 +27,10 @@ public class HoleController : MonoBehaviour {
         string num;
         if (other.gameObject.CompareTag("PlayerBall")) {
         	Debug.Log("This is PlayerBall.");
-        	other.gameObject.SetActive (false);
+            cameraController.AddScore(-1);
+        	other.gameObject.transform.position = new Vector3(0, 0.5f, 0);
+            other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            other.gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             globalHoleEffects.soundPlay();
         }
         if (other.gameObject.CompareTag("GameBall")) {
